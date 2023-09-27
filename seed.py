@@ -1,13 +1,40 @@
 #!/usr/bin/env python3
-
+#  import the necessary files
 from random import randint, choice as rc
 
 from faker import Faker
 
 from app import app
 from models import db, Restaurant, Pizza, RestaurantPizza
-
+import random
 fake = Faker()
+
+# create the pizza list
+
+pizza_names = [
+"Margherita Pizza"
+"Pepperoni Pizza"
+"Hawaiian Pizza"
+"Mushroom and Garlic Pizza"
+"Veggie Supreme Pizza"
+"Meat Lovers Pizza"
+"BBQ Chicken Pizza"
+"White Pizza"
+"Buffalo Chicken Pizza"
+"Four Cheese Pizza"
+"Pesto Pizza"
+"Taco Pizza"
+"Mediterranean Pizza"
+"Supreme Pizza"
+"Breakfast Pizza"
+"Clam Pizza"
+"BBQ Pulled Pork Pizza"
+"Philly Cheesesteak Pizza"
+"BLT Pizza"
+"Shrimp Scampi Pizza"
+]
+
+# add a list of pizza ingredients
 
 with app.app_context():
 
