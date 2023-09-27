@@ -35,6 +35,21 @@ pizza_names = [
 ]
 
 # add a list of pizza ingredients
+pizza_ingredients = [
+"Tomato sauce"
+"Mozzarella cheese"
+"Ham"
+"Pineapple chunks" 
+"Fresh basil"
+"Olive oil"  
+"Sautéed mushrooms"
+"Roasted garlic" 
+"Onions"
+"Black olives"
+"Sausage"
+"Bacon"
+"Ham" 
+]
 
 with app.app_context():
 
