@@ -1,89 +1,95 @@
 #!/usr/bin/env python3
-#  import the necessary files
-from random import randint, choice as rc
 
+# Import necessary modules
+from random import choice as sample
 from faker import Faker
-
-from app import app
 from models import db, Restaurant, Pizza, RestaurantPizza
 import random
+
+# Create a Faker instance to generate fake data
 fake = Faker()
 
-# create the pizza list
-
+# Define a list of pizza names
 pizza_names = [
-"Margherita Pizza"
-"Pepperoni Pizza"
-"Hawaiian Pizza"
-"Mushroom and Garlic Pizza"
-"Veggie Supreme Pizza"
-"Meat Lovers Pizza"
-"BBQ Chicken Pizza"
-"White Pizza"
-"Buffalo Chicken Pizza"
-"Four Cheese Pizza"
-"Pesto Pizza"
-"Taco Pizza"
-"Mediterranean Pizza"
-"Supreme Pizza"
-"Breakfast Pizza"
-"Clam Pizza"
-"BBQ Pulled Pork Pizza"
-"Philly Cheesesteak Pizza"
-"BLT Pizza"
-"Shrimp Scampi Pizza"
+    "Margherita Pizza",
+    "Pepperoni Pizza",
+    "Hawaiian Pizza",
+    "Mushroom and Garlic Pizza",
+    "Veggie Supreme Pizza",
+    "Meat Lovers Pizza",
+    "BBQ Chicken Pizza",
+    "White Pizza",
+    "Buffalo Chicken Pizza",
+    "Four Cheese Pizza",
+    "Pesto Pizza",
+    "Taco Pizza",
+    "Mediterranean Pizza",
+    "Supreme Pizza",
+    "Breakfast Pizza",
+    "Clam Pizza",
+    "BBQ Pulled Pork Pizza",
+    "Philly Cheesesteak Pizza",
+    "BLT Pizza",
+    "Shrimp Scampi Pizza",
 ]
 
-# add a list of pizza ingredients
+# Define a list of pizza ingredients
 pizza_ingredients = [
-"Tomato sauce"
-"Mozzarella cheese"
-"Ham"
-"Pineapple chunks" 
-"Fresh basil"
-"Olive oil"  
-"Sautéed mushrooms"
-"Roasted garlic" 
-"Onions"
-"Black olives"
-"Sausage"
-"Bacon"
-"Ham" 
+    "Tomato sauce",
+    "Mozzarella cheese",
+    "Ham",
+    "Pineapple chunks",
+    "Fresh basil",
+    "Olive oil",
+    "Sautéed mushrooms",
+    "Roasted garlic",
+    "Onions",
+    "Black olives",
+    "Sausage",
+    "Bacon",
+    "Ham",
 ]
 
+# Clear existing data from the database
 with app.app_context():
+    db.session.query(RestaurantPizza).delete()
+    db.session.query(Pizza).delete()
+    db.session.query(Restaurant).delete()
+    db.session.commit()
 
-    Restaurant.query.delete()
-    Pizza.query.delete()
-    RestaurantPizza.query.delete()
-    
-    restaurants = []
-    for i in range(50):
-        b = Restaurant(
-            name=fake.company()
+# Create fake restaurants
+with app.app_context():
+    restaurants = [
+        Restaurant(
+            name=fake.company(),
+            address=fake.address(),
         )
-        restaurants.append(b)
-    
+        for _ in range(10)
+    ]
     db.session.add_all(restaurants)
+    db.session.commit()
 
-    pizzas = []
-    names = []
-    for i in range(100):
-
-        name = fake.first_name()
-        while name in names:
-            name = fake.first_name()
-        names.append(name)
-
-        bg = Pizza(
-            name=name,
-            price=randint(1,10),
-            pizza=rc(restaurants)
+# Create fake pizzas
+with app.app_context():
+    pizzas = [
+        Pizza(
+            name=pizza_name,
+            ingredients=', '.join(sample(pizza_ingredients, 3))
         )
-
-        pizzas.append(bg)
-
+        for pizza_name in pizza_names
+    ]
     db.session.add_all(pizzas)
     db.session.commit()
-    
-    
+
+# Create restaurant-pizza relationships
+with app.app_context():
+    restaurant_pizzas = [
+        RestaurantPizza(
+            pizza_id=random.choice(pizzas).id,
+            restaurant_id=random.choice(restaurants).id,
+            price=random.randint(1, 30)
+        )
+        for _ in range(10)
+    ]
+    db.session.add_all(restaurant_pizzas)
+    db.session.commit()
