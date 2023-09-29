@@ -4,6 +4,7 @@
 from random import choice as sample
 from faker import Faker
 from models import db, Restaurant, Pizza, RestaurantPizza
+from routes import app
 import random
 
 # Create a Faker instance to generate fake data
